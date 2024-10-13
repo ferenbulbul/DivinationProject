@@ -1,0 +1,15 @@
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Application/bin/Debug/net8.0/Divination.Application.deps.json
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Application/bin/Debug/net8.0/Divination.Application.dll
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Application/bin/Debug/net8.0/Divination.Application.pdb
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Application/obj/Debug/net8.0/Divination.Application.GeneratedMSBuildEditorConfig.editorconfig
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Application/obj/Debug/net8.0/Divination.Application.AssemblyInfoInputs.cache
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Application/obj/Debug/net8.0/Divination.Application.AssemblyInfo.cs
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Application/obj/Debug/net8.0/Divination.Application.csproj.CoreCompileInputs.cache
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Application/obj/Debug/net8.0/Divination.Application.dll
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Application/obj/Debug/net8.0/refint/Divination.Application.dll
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Application/obj/Debug/net8.0/Divination.Application.pdb
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Application/obj/Debug/net8.0/ref/Divination.Application.dll
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Application/bin/Debug/net8.0/Divination.Domain.dll
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Application/bin/Debug/net8.0/Divination.Domain.pdb
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Application/obj/Debug/net8.0/Divination.Application.csproj.AssemblyReference.cache
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Application/obj/Debug/net8.0/Divinati.E5B96254.Up2Date
