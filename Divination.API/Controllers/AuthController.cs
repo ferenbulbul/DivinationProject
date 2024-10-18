@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -24,11 +25,11 @@ namespace Divination.API.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IEmailService _emailService;
 
-        public AuthController(IAppUserService userService, UserManager<AppUser> userManager ,IEmailService emailService)
+        public AuthController(IAppUserService userService, UserManager<AppUser> userManager, IEmailService emailService)
         {
             _userService = userService;
             _userManager = userManager;
-            _emailService=emailService;
+            _emailService = emailService;
         }
 
         //[Authorize(AuthenticationSchemes = "Bearer", Roles = "fortuneteller")]
@@ -72,15 +73,16 @@ namespace Divination.API.Controllers
             return Ok(result);
         }
 
+
         [HttpGet]
-        public async Task<IActionResult> ConfirmEmail(string token)
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
             if (token == null)
             {
                 return BadRequest("Invalid email confirmation request.");
             }
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null)
             {
                 return BadRequest("User not found.");
@@ -125,22 +127,46 @@ namespace Divination.API.Controllers
             var user = await _userManager.FindByIdAsync(id.ToString());
 
 
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-                
-
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var callbackUrl = Url.Action(
                 "ConfirmEmail",  // Onaylama için kullanılan action
                 "Auth",  // Controller adı
-                new { userId = user.Id, token = token },  // URL parametreleri
+                new { userId = user.Id, token },  // URL parametreleri
                 protocol: HttpContext.Request.Scheme);  // Protokolü ayarla (HTTP/HTTPS)
 
-            await _emailService.SendEmailAsync(user.Email,"Email doğrulama Kodu",callbackUrl);
-            return Ok(callbackUrl) ;
+            await _emailService.SendEmailAsync(user.Email, "Email doğrulama Kodu", callbackUrl);
+            return Ok(callbackUrl);
         }
 
-      
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword( ChangePasswordDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var userId = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value; // Kullanıcının ID'sini al
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+            if (result.Succeeded)
+            {
+                return Ok("Password changed successfully.");
+            }
+
+            // Hataları döndür
+            return BadRequest(result.Errors);
+        }
 
     }
 }

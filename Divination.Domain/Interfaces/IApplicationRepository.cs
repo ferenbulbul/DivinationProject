@@ -4,8 +4,7 @@ using Divination.Domain.Interfaces;
 
 namespace Divination.Domain.Interfaces
 {
-    public interface IAppUserRepository : IBaseRepository<AppUser>
+    public interface IApplicationRepository : IBaseRepository<Applications>
     {
-        Task<bool> Register(AppUser appUser);
     }
 }

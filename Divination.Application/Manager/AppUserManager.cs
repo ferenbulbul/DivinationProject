@@ -9,6 +9,7 @@ using System.Web;
 using Divination.Application.Models.DTOs;
 using Divination.Application.Services;
 using Divination.Domain.Entities;
+using Divination.Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -43,7 +44,8 @@ namespace Divination.Application.Manager
                 UserName = registerDto.UserName,
                 Email = registerDto.Email,
                 PasswordHash = registerDto.Password,
-                Occupation = registerDto.Occupation
+                Occupation = registerDto.Occupation,
+                CreatedDate=DateTime.Now
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
@@ -64,7 +66,8 @@ namespace Divination.Application.Manager
                 UserName = registerDto.UserName,
                 Email = registerDto.Email,
                 PasswordHash = registerDto.Password,
-                Experience = registerDto.Experience
+                Experience = registerDto.Experience,
+                CreatedDate=DateTime.Now
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);

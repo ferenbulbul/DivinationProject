@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Divination.Infrastructure.EntityTypeConfig
 {
-    public class AppUserConfig:IEntityTypeConfiguration<AppUser>
+    public class AppUserConfig:BaseEnitityConfig<AppUser>
     {
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
@@ -28,6 +28,10 @@ namespace Divination.Infrastructure.EntityTypeConfig
             builder.Property(u => u.DateofBirth)
                          .IsRequired()
                          .HasMaxLength(10);
+
+       //      builder.Property(e => e.IsActive)
+       //         .HasDefaultValue(true);
+       
 
         }
     }

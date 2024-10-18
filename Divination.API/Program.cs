@@ -4,13 +4,16 @@ using Divination.Application.Manager;
 using Divination.Application.Managers;
 using Divination.Application.Services;
 using Divination.Domain.Entities;
+using Divination.Domain.Interfaces;
 using Divination.Infrastructure;
 using Divination.Infrastructure.Data;
 using Divination.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -65,6 +68,7 @@ builder.Services.AddDbContext<IdentityContext>(options =>
     new MySqlServerVersion(new Version(9, 0, 0))));
 
 
+
 // builder.Services.AddAuthorization(options =>
 // {
 //     options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
@@ -73,6 +77,11 @@ builder.Services.AddDbContext<IdentityContext>(options =>
 // });
 
 // Controller ve Swagger ayarları
+
+
+
+builder.Services.Configure<FormOptions>(options=> options.MultipartBodyLengthLimit = 10 * 1024 * 1024);
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -112,6 +121,13 @@ builder.Services.AddSwaggerGen(c =>
 // Servisleri ekle
 builder.Services.AddScoped<IAppUserService, AppUserManager>();
 builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
+
+builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+builder.Services.AddScoped<IClientService, ClientManager>();
+
+builder.Services.AddScoped<IFortuneTellerService, FortuneTellerManager>();
+builder.Services.AddScoped<IFortuneTellerRepository,FortuneTellerRepository>();
+
 builder.Services.AddScoped<IEmailService, EmailManager>();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
@@ -130,6 +146,12 @@ app.UseCors("AllowAll");
 // app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+// app.UseStaticFiles(new StaticFileOptions
+//         {
+//             FileProvider = new PhysicalFileProvider(
+//                 Path.Combine(Directory.GetCurrentDirectory(), "UploadedFiles")),
+//             RequestPath = "/UploadedFiles"
+//         });
 
 app.MapControllers();
 
