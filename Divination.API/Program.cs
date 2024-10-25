@@ -62,7 +62,7 @@ builder.Services.AddIdentity<AppUser, AppRole>()
     .AddEntityFrameworkStores<IdentityContext>()
     .AddDefaultTokenProviders();
 
-// Veritabanı ayarları
+// Veritabanı ayarlarıƒ
 builder.Services.AddDbContext<IdentityContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
     new MySqlServerVersion(new Version(9, 0, 0))));
@@ -118,15 +118,25 @@ builder.Services.AddSwaggerGen(c =>
     c.AddSecurityRequirement(securityRequirement);
 });
 
+
+builder.Services.Configure<FormOptions>(options=>{
+    options.MultipartBodyLengthLimit=104857600;
+});
+
 // Servisleri ekle
 builder.Services.AddScoped<IAppUserService, AppUserManager>();
 builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
 
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
-builder.Services.AddScoped<IClientService, ClientManager>();
+builder.Services.AddScoped<IApplicationService, ApplicationManager>();
 
 builder.Services.AddScoped<IFortuneTellerService, FortuneTellerManager>();
 builder.Services.AddScoped<IFortuneTellerRepository,FortuneTellerRepository>();
+
+builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
+builder.Services.AddScoped<ICategoryService,CategoryManager>();
+
+builder.Services.AddScoped<IAnswerRepository,AnswerRepository>();
 
 builder.Services.AddScoped<IEmailService, EmailManager>();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));

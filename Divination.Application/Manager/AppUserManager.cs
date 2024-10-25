@@ -45,7 +45,8 @@ namespace Divination.Application.Manager
                 Email = registerDto.Email,
                 PasswordHash = registerDto.Password,
                 Occupation = registerDto.Occupation,
-                CreatedDate=DateTime.Now
+                CreatedDate=DateTime.Now,
+                IsActive=true
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
@@ -67,7 +68,8 @@ namespace Divination.Application.Manager
                 Email = registerDto.Email,
                 PasswordHash = registerDto.Password,
                 Experience = registerDto.Experience,
-                CreatedDate=DateTime.Now
+                CreatedDate=DateTime.Now,
+                IsActive=true
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
@@ -98,7 +100,6 @@ namespace Divination.Application.Manager
                     Roles = roles.ToList(),
                     Token = token,
                     EmailConfirmed=user.EmailConfirmed
-                    
                 };
             }
 

@@ -13,3 +13,4 @@
 /Users/erenbulbul/Desktop/DivinationProject/Divination.Application/bin/Debug/net8.0/Divination.Domain.pdb
 /Users/erenbulbul/Desktop/DivinationProject/Divination.Application/obj/Debug/net8.0/Divination.Application.csproj.AssemblyReference.cache
 /Users/erenbulbul/Desktop/DivinationProject/Divination.Application/obj/Debug/net8.0/Divinati.E5B96254.Up2Date
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Application/obj/Debug/net8.0/Divination.Application.sourcelink.json

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Divination.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class _4 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,13 +42,17 @@ namespace Divination.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    FirstName = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
+                    FirstName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LastName = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
+                    LastName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Gender = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                    Gender = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DateofBirth = table.Column<DateTime>(type: "datetime(6)", maxLength: 10, nullable: false),
+                    DateofBirth = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
@@ -75,6 +79,25 @@ namespace Divination.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Category",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CategoryName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Category", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -200,7 +223,7 @@ namespace Divination.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Clientsss",
+                name: "Clients",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
@@ -211,9 +234,9 @@ namespace Divination.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Clientsss", x => x.Id);
+                    table.PrimaryKey("PK_Clients", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Clientsss_AspNetUsers_Id",
+                        name: "FK_Clients_AspNetUsers_Id",
                         column: x => x.Id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -241,6 +264,67 @@ namespace Divination.Infrastructure.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "Applications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ImageData1 = table.Column<byte[]>(type: "longblob", nullable: false),
+                    ImageData2 = table.Column<byte[]>(type: "longblob", nullable: false),
+                    ImageData3 = table.Column<byte[]>(type: "longblob", nullable: false),
+                    Answer = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    FortunetellerId = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Applications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Applications_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Applications_FortuneTellers_FortunetellerId",
+                        column: x => x.FortunetellerId,
+                        principalTable: "FortuneTellers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ApplicationsCategory",
+                columns: table => new
+                {
+                    ApplicationsId = table.Column<int>(type: "int", nullable: false),
+                    CategoriesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationsCategory", x => new { x.ApplicationsId, x.CategoriesId });
+                    table.ForeignKey(
+                        name: "FK_ApplicationsCategory_Applications_ApplicationsId",
+                        column: x => x.ApplicationsId,
+                        principalTable: "Applications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicationsCategory_Category_CategoriesId",
+                        column: x => x.CategoriesId,
+                        principalTable: "Category",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
@@ -252,9 +336,31 @@ namespace Divination.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DateofBirth", "Email", "EmailConfirmed", "FirstName", "Gender", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, "0a723591-0362-4c03-bd93-c7f6335d2623", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin", false, "", "", "", false, null, null, null, "admin", null, false, null, false, "admin" });
+                table: "Category",
+                columns: new[] { "Id", "CategoryName", "CreatedDate", "DeletedDate", "IsActive", "UpdatedDate" },
+                values: new object[,]
+                {
+                    { 1, "Aşk", new DateTime(2024, 10, 24, 16, 28, 2, 890, DateTimeKind.Local).AddTicks(4630), null, true, null },
+                    { 2, "Kariyer", new DateTime(2024, 10, 24, 16, 28, 2, 890, DateTimeKind.Local).AddTicks(4670), null, true, null },
+                    { 3, "Aile", new DateTime(2024, 10, 24, 16, 28, 2, 890, DateTimeKind.Local).AddTicks(4680), null, true, null },
+                    { 4, "Para", new DateTime(2024, 10, 24, 16, 28, 2, 890, DateTimeKind.Local).AddTicks(4680), null, true, null },
+                    { 5, "Akrağbağlık İlişkileri", new DateTime(2024, 10, 24, 16, 28, 2, 890, DateTimeKind.Local).AddTicks(4680), null, true, null }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Applications_ClientId",
+                table: "Applications",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Applications_FortunetellerId",
+                table: "Applications",
+                column: "FortunetellerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationsCategory_CategoriesId",
+                table: "ApplicationsCategory",
+                column: "CategoriesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -298,6 +404,9 @@ namespace Divination.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ApplicationsCategory");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
@@ -313,13 +422,19 @@ namespace Divination.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Clientsss");
+                name: "Applications");
 
             migrationBuilder.DropTable(
-                name: "FortuneTellers");
+                name: "Category");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Clients");
+
+            migrationBuilder.DropTable(
+                name: "FortuneTellers");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

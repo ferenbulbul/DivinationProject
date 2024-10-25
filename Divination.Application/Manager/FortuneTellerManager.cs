@@ -20,7 +20,9 @@ namespace Divination.Application.Manager
         public async Task<IEnumerable<FortuneTellerListDto>> FortuneTellerList()
         {
             var list = await _fortuneTeller.GetAllAsync();
-            var dtoList = list.Select(fortuneTeller => new FortuneTellerListDto
+            var dtoList = list
+            .Where(f=>f.IsActive==true)
+            .Select(fortuneTeller => new FortuneTellerListDto
             {
                 Id=fortuneTeller.Id,
                 FirstName = fortuneTeller.FirstName,

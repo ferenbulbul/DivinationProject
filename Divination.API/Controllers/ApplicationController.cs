@@ -16,23 +16,23 @@ namespace Divination.API.Controllers
     [Route("api/[controller]/[action]")]
     public class ApplicationController : Controller
     {
-        private readonly IClientService _clientservice;
+        private readonly IApplicationService _service;
 
-        public ApplicationController(IClientService clientService)
+        public ApplicationController(IApplicationService service)
         {
-            _clientservice = clientService;
+            _service = service;
         }
         [HttpPost]
-        public async Task<IActionResult> UploadPhoto(ApplicationDto applicationDto)
+        public async Task<IActionResult> AddApplication(ApplicationDto applicationDto)
         {
-            if (applicationDto.Photo == null)
+            if (applicationDto.Photo1 == null)
             {
                 return BadRequest("Photo is required.");
             }
 
             try
             {
-                await _clientservice.AddAplication(applicationDto);
+                await _service.AddAplication(applicationDto);
                 return Ok();
             }
             catch (Exception ex)
@@ -40,22 +40,27 @@ namespace Divination.API.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-    
-        [HttpGet]
-        public async Task<IActionResult> GetPhoto(int id)
+
+
+        [HttpPost]
+        public async Task<IActionResult> AnswerApplication(int id, string answer)
         {
             try
             {
-                // Base64 string formatında resmi geri döndür
-                var base64Photo = await _clientservice.GetPhotoAsync(id);
-
-                // Resmi JSON formatında geri döndür
-                return Ok(new { Photo = base64Photo });
+                await _service.AddAnswer(id, answer);
+                return Ok();
             }
             catch (Exception ex)
             {
                 return NotFound(ex.Message);
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetApplicationByFortuneTeller(int id)
+        {
+           var application= await _service.GetApplications(id);
+           return Ok(application);
         }
     }
 }

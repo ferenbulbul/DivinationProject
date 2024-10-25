@@ -8,7 +8,12 @@ namespace Divination.Application.Models.DTOs
 {
     public class ApplicationDto
     {
-        public IFormFile Photo { get; set; }
+        public string Photo1 { get; set; }
+        public string Photo2 { get; set; }
+        public string Photo3 { get; set; }
+        public List<int> CategoryIds { get; set; }
+        public int ClientId { get; set; }
+        public int FortunetellerId { get; set; }
 
     }
 }

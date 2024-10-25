@@ -15,3 +15,4 @@
 /Users/erenbulbul/Desktop/DivinationProject/Divination.Infrastructure/obj/Release/net8.0/Divination.Infrastructure.pdb
 /Users/erenbulbul/Desktop/DivinationProject/Divination.Infrastructure/obj/Release/net8.0/Divination.Infrastructure.genruntimeconfig.cache
 /Users/erenbulbul/Desktop/DivinationProject/Divination.Infrastructure/obj/Release/net8.0/ref/Divination.Infrastructure.dll
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Infrastructure/obj/Release/net8.0/Divination.Infrastructure.sourcelink.json

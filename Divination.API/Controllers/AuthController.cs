@@ -53,7 +53,7 @@ namespace Divination.API.Controllers
             {
                 return BadRequest(result);
             }
-            return Ok("Client registered successfully");
+            return Ok(result);
         }
 
         [HttpPost]

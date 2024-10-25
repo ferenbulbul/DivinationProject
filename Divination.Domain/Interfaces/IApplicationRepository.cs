@@ -6,5 +6,7 @@ namespace Divination.Domain.Interfaces
 {
     public interface IApplicationRepository : IBaseRepository<Applications>
     {
+        Task<IEnumerable<Applications>> GetApplicationsIsAnswerFalseAsync(int id);
+         Task IsAnswerTrue(int id);
     }
 }

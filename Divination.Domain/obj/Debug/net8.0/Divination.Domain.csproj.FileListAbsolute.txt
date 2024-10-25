@@ -10,3 +10,4 @@
 /Users/erenbulbul/Desktop/DivinationProject/Divination.Domain/obj/Debug/net8.0/Divination.Domain.pdb
 /Users/erenbulbul/Desktop/DivinationProject/Divination.Domain/obj/Debug/net8.0/ref/Divination.Domain.dll
 /Users/erenbulbul/Desktop/DivinationProject/Divination.Domain/obj/Debug/net8.0/Divination.Domain.csproj.AssemblyReference.cache
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Domain/obj/Debug/net8.0/Divination.Domain.sourcelink.json

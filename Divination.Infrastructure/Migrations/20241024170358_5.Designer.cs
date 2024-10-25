@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Divination.Infrastructure.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20241011210223_InitialCreate3")]
-    partial class InitialCreate3
+    [Migration("20241024170358_5")]
+    partial class _5
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,56 @@ namespace Divination.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("ApplicationsCategory", b =>
+                {
+                    b.Property<int>("ApplicationsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoriesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ApplicationsId", "CategoriesId");
+
+                    b.HasIndex("CategoriesId");
+
+                    b.ToTable("ApplicationsCategory");
+                });
+
+            modelBuilder.Entity("Divination.Domain.Entities.Answer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Answers")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ApplicationsId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationsId")
+                        .IsUnique();
+
+                    b.ToTable("Answers", (string)null);
+                });
 
             modelBuilder.Entity("Divination.Domain.Entities.AppRole", b =>
                 {
@@ -89,9 +139,14 @@ namespace Divination.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
 
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
                     b.Property<DateTime>("DateofBirth")
-                        .HasMaxLength(10)
                         .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -102,18 +157,20 @@ namespace Divination.Infrastructure.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Gender")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
@@ -144,6 +201,9 @@ namespace Divination.Infrastructure.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
@@ -160,24 +220,123 @@ namespace Divination.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
 
                     b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("Divination.Domain.Entities.Applications", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("FortunetellerId")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("ImageData1")
+                        .IsRequired()
+                        .HasColumnType("longblob");
+
+                    b.Property<byte[]>("ImageData2")
+                        .IsRequired()
+                        .HasColumnType("longblob");
+
+                    b.Property<byte[]>("ImageData3")
+                        .IsRequired()
+                        .HasColumnType("longblob");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsAnswer")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("FortunetellerId");
+
+                    b.ToTable("Applications", (string)null);
+                });
+
+            modelBuilder.Entity("Divination.Domain.Entities.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "4d1c008a-56a8-4460-ad9e-529f634a92e1",
-                            DateofBirth = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "admin",
-                            EmailConfirmed = false,
-                            FirstName = "",
-                            Gender = "",
-                            LastName = "",
-                            LockoutEnabled = false,
-                            PasswordHash = "admin",
-                            PhoneNumberConfirmed = false,
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
+                            CategoryName = "Aşk",
+                            CreatedDate = new DateTime(2024, 10, 24, 20, 3, 58, 430, DateTimeKind.Local).AddTicks(3170),
+                            IsActive = true
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryName = "Kariyer",
+                            CreatedDate = new DateTime(2024, 10, 24, 20, 3, 58, 430, DateTimeKind.Local).AddTicks(3220),
+                            IsActive = true
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryName = "Aile",
+                            CreatedDate = new DateTime(2024, 10, 24, 20, 3, 58, 430, DateTimeKind.Local).AddTicks(3220),
+                            IsActive = true
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryName = "Para",
+                            CreatedDate = new DateTime(2024, 10, 24, 20, 3, 58, 430, DateTimeKind.Local).AddTicks(3230),
+                            IsActive = true
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryName = "Akrağbağlık İlişkileri",
+                            CreatedDate = new DateTime(2024, 10, 24, 20, 3, 58, 430, DateTimeKind.Local).AddTicks(3230),
+                            IsActive = true
                         });
                 });
 
@@ -310,6 +469,51 @@ namespace Divination.Infrastructure.Migrations
                     b.ToTable("FortuneTellers", (string)null);
                 });
 
+            modelBuilder.Entity("ApplicationsCategory", b =>
+                {
+                    b.HasOne("Divination.Domain.Entities.Applications", null)
+                        .WithMany()
+                        .HasForeignKey("ApplicationsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Divination.Domain.Entities.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Divination.Domain.Entities.Answer", b =>
+                {
+                    b.HasOne("Divination.Domain.Entities.Applications", "Applications")
+                        .WithOne("Answer")
+                        .HasForeignKey("Divination.Domain.Entities.Answer", "ApplicationsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Applications");
+                });
+
+            modelBuilder.Entity("Divination.Domain.Entities.Applications", b =>
+                {
+                    b.HasOne("Divination.Domain.Entities.Client", "Client")
+                        .WithMany("Applications")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Divination.Domain.Entities.Fortuneteller", "FortuneTeller")
+                        .WithMany("Applications")
+                        .HasForeignKey("FortunetellerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("FortuneTeller");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("Divination.Domain.Entities.AppRole", null)
@@ -377,6 +581,22 @@ namespace Divination.Infrastructure.Migrations
                         .HasForeignKey("Divination.Domain.Entities.Fortuneteller", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Divination.Domain.Entities.Applications", b =>
+                {
+                    b.Navigation("Answer")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Divination.Domain.Entities.Client", b =>
+                {
+                    b.Navigation("Applications");
+                });
+
+            modelBuilder.Entity("Divination.Domain.Entities.Fortuneteller", b =>
+                {
+                    b.Navigation("Applications");
                 });
 #pragma warning restore 612, 618
         }

@@ -58,3 +58,4 @@
 /Users/erenbulbul/Desktop/DivinationProject/Divination.API/obj/Release/net8.0/Divination.API.pdb
 /Users/erenbulbul/Desktop/DivinationProject/Divination.API/obj/Release/net8.0/Divination.API.genruntimeconfig.cache
 /Users/erenbulbul/Desktop/DivinationProject/Divination.API/obj/Release/net8.0/ref/Divination.API.dll
+/Users/erenbulbul/Desktop/DivinationProject/Divination.API/obj/Release/net8.0/Divination.API.sourcelink.json

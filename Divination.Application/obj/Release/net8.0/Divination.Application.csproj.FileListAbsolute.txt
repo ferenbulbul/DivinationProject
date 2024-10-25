@@ -13,3 +13,4 @@
 /Users/erenbulbul/Desktop/DivinationProject/Divination.Application/obj/Release/net8.0/refint/Divination.Application.dll
 /Users/erenbulbul/Desktop/DivinationProject/Divination.Application/obj/Release/net8.0/Divination.Application.pdb
 /Users/erenbulbul/Desktop/DivinationProject/Divination.Application/obj/Release/net8.0/ref/Divination.Application.dll
+/Users/erenbulbul/Desktop/DivinationProject/Divination.Application/obj/Release/net8.0/Divination.Application.sourcelink.json

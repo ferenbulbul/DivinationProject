@@ -9,6 +9,6 @@ namespace Divination.Domain.Entities
     {
         public string Occupation { get; set; } = string.Empty;
         public string MaritalStatus { get; set; } = string.Empty;
-
+        public ICollection<Applications>? Applications { get; set; }
     }
 }
