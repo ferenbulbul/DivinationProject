@@ -13,6 +13,7 @@ namespace Divination.Application.Models.DTOs
         public List<string> Roles { get; set; }
         public string Token { get; set; }
         public bool EmailConfirmed { get; set; }
+        public float? Rating { get; set; }
 
 
     }

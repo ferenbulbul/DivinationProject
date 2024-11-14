@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Divination.Infrastructure.Repositories
 {
-    public class FortuneTellerRepository : BaseRepository<Fortuneteller>,IFortuneTellerRepository
+    public class FortuneTellerRepository : BaseRepository<Fortuneteller>, IFortuneTellerRepository
     {
         protected new readonly IdentityContext _context;
         private DbSet<Fortuneteller> _entities;
@@ -19,6 +19,22 @@ namespace Divination.Infrastructure.Repositories
             _entities = _context.Set<Fortuneteller>();
         }
 
-        
+        public async Task UpdateRating(int id, float rating)
+        {
+
+            var entity = await _entities.FindAsync(id);
+
+            if (entity != null)
+            {
+                entity.Rating = rating;
+                _context.Entry(entity).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("Entity not found");
+            }
+        }
+
     }
 }

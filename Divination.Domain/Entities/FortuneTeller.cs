@@ -8,6 +8,7 @@ namespace Divination.Domain.Entities
     public class Fortuneteller:AppUser
     {
          public string Experience { get; set; } 
+         public float? Rating { get; set; }
          public ICollection<Applications> Applications { get; set; }
     }
 }

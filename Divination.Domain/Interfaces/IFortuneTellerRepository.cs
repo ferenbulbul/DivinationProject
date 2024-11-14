@@ -8,6 +8,6 @@ namespace Divination.Domain.Interfaces
 {
     public interface IFortuneTellerRepository:IBaseRepository<Fortuneteller>
     {
-        
+        Task UpdateRating(int id,float rating);
     }
 }

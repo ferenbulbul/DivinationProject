@@ -25,8 +25,19 @@ namespace Divination.Infrastructure.Repositories
 
             return await _entities
              .Include(a => a.Client)
-             .Include(a=>a.Categories)
-             .Where(a => a.FortunetellerId == id && a.IsActive == true && a.IsAnswer==false)
+             .Include(a => a.Categories)
+             .Where(a => a.FortunetellerId == id && a.IsActive == true && a.IsAnswer == false)
+             .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Applications>> GetApplicationsIsAnswerTrueAsync(int id)
+        {
+
+            return await _entities
+             .Include(a => a.Client)
+             .Include(a => a.Categories)
+             .Include(a => a.Answer)
+             .Where(a => a.FortunetellerId == id && a.IsActive == true && a.IsAnswer == true)
              .ToListAsync();
         }
 
@@ -47,6 +58,27 @@ namespace Divination.Infrastructure.Repositories
             }
         }
 
+        public async Task<IEnumerable<Applications>> GetApplicationByClientIdIsAnsweredTrueAsync(int id)
+        {
+            return await _entities.Include(a => a.Answer)
+                       .Include(a => a.Client)
+                       .Include(a => a.FortuneTeller)
+                       .Include(a => a.Categories)
+                       .Where(a => a.ClientId == id && a.IsAnswer == true && a.IsActive == true).ToListAsync();
+        }
 
+        public async Task<IEnumerable<Applications>> GetApplicationByClientIdIsAnsweredFalseAsync(int id)
+        {
+            return await _entities.Include(a => a.Answer)
+                       .Include(a => a.Client)
+                       .Include(a => a.FortuneTeller)
+                       .Include(a => a.Categories)
+                       .Where(a => a.ClientId == id && a.IsAnswer == false && a.IsActive == true).ToListAsync();
+        }
+
+        public async Task<int> GetFortuneTellerIdByApplicationId(int ApplicationId)
+        {
+            return await _entities.Where(a => a.Id == ApplicationId).Select(a => a.FortunetellerId).FirstOrDefaultAsync();
+        }
     }
 }

@@ -59,8 +59,31 @@ namespace Divination.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetApplicationByFortuneTeller(int id)
         {
-           var application= await _service.GetApplications(id);
-           return Ok(application);
+            var application = await _service.GetApplications(id);
+            return Ok(application);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetApplicationByFortuneTellerIsAnsweredTrue(int id)
+        {
+            var application = await _service.GetApplicationAnsweredTrue(id);
+            return Ok(application);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetApplicationByClientIdIsAnsweredFalse(int id)
+        {
+            var application = await _service.GetApplicationsByClientIdIsAnsweredFalse(id);
+            return Ok(application);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetApplicationByClientIdIsAnsweredTrue(int id)
+        {
+            var application = await _service.GetApplicationsByClientIdIsAnsweredTrue(id);
+            return Ok(application);
+        }
+
+        
     }
 }

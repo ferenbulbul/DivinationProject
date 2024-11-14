@@ -15,11 +15,14 @@ namespace Divination.Application.Manager
         private readonly ICategoryRepository _categoryservice;
         private readonly IApplicationRepository _applicationService;
         private readonly IAnswerRepository _answerService;
-        public ApplicationManager(IApplicationRepository service, ICategoryRepository categoryservice, IAnswerRepository answerService)
+        private readonly IFortuneTellerRepository _fortuneService;
+
+        public ApplicationManager(IApplicationRepository service, ICategoryRepository categoryservice, IAnswerRepository answerService, IFortuneTellerRepository fortuneService)
         {
             _applicationService = service;
             _categoryservice = categoryservice;
             _answerService = answerService;
+            _fortuneService = fortuneService;
         }
         public async Task AddAplication(ApplicationDto applicationDto)
         {
@@ -27,7 +30,7 @@ namespace Divination.Application.Manager
 
             foreach (var photo in new List<string> { applicationDto.Photo1, applicationDto.Photo2, applicationDto.Photo3 })
             {
-                if (!string.IsNullOrEmpty(photo)) // Base64 string boş değilse işleme başla
+                if (!string.IsNullOrEmpty(photo))
                 {
                     try
                     {
@@ -40,8 +43,6 @@ namespace Divination.Application.Manager
                     }
                 }
             }
-
-
             var application = new Applications
             {
                 ImageData1 = images.ElementAtOrDefault(0),
@@ -50,7 +51,9 @@ namespace Divination.Application.Manager
                 ClientId = applicationDto.ClientId,
                 FortunetellerId = applicationDto.FortunetellerId,
                 Categories = new List<Category>(),
-                IsAnswer = false
+                IsAnswer = false,
+                CreatedDate = DateTime.Now
+
             };
 
             foreach (var categoryId in applicationDto.CategoryIds)
@@ -61,8 +64,20 @@ namespace Divination.Application.Manager
                     application.Categories.Add(category);
                 }
             }
+            try
+            {
+                await _applicationService.AddAsync(application);
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine("Inner Exception: " + ex.InnerException.Message);
+                }
 
-            await _applicationService.AddAsync(application);
+                Console.WriteLine(ex.Message);
+            }
+
         }
 
 
@@ -71,15 +86,14 @@ namespace Divination.Application.Manager
             var applicationIsAnswer = await _applicationService.GetByIdAsync(id);
             applicationIsAnswer.IsAnswer = true;
 
-            var ans=new Answer{
-                    ApplicationsId=id,
-                    Answers=answer
+            var ans = new Answer
+            {
+                ApplicationsId = id,
+                Answers = answer
             };
 
             await _answerService.AddAsync(ans);
             await _applicationService.IsAnswerTrue(id);
-
-
 
         }
 
@@ -106,8 +120,8 @@ namespace Divination.Application.Manager
                         Gender = app.Client.Gender,
                         Categories = app.Categories.Select(ac => ac.CategoryName).ToList(),
                         CreateDate = app.CreatedDate,
-                        Occupation=app.Client.Occupation,
-                        BirthDate=app.Client.DateofBirth
+                        Occupation = app.Client.Occupation,
+                        BirthDate = app.Client.DateofBirth
                     };
                     resaultList.Add(application);
                 }
@@ -118,5 +132,121 @@ namespace Divination.Application.Manager
                 throw new ApplicationException("There was a problem fetching the applications.", ex);
             }
         }
+
+
+        public async Task<IEnumerable<GetApplicationAnsweredTrueDto>?> GetApplicationAnsweredTrue(int fortuneTellerId)
+        {
+            try
+            {
+
+                var appList = await _applicationService.GetApplicationsIsAnswerTrueAsync(fortuneTellerId);
+
+                var resaultList = new List<GetApplicationAnsweredTrueDto>();
+
+                foreach (var app in appList)
+                {
+                    var application = new GetApplicationAnsweredTrueDto
+                    {
+                        ImageData1 = Convert.ToBase64String(app.ImageData1),
+                        ImageData2 = Convert.ToBase64String(app.ImageData2),
+                        ImageData3 = Convert.ToBase64String(app.ImageData3),
+                        Id = app.Id,
+                        FirstName = app.Client.FirstName,
+                        LastName = app.Client.LastName,
+                        MaritalStatus = app.Client.Occupation,
+                        Gender = app.Client.Gender,
+                        Categories = app.Categories.Select(ac => ac.CategoryName).ToList(),
+                        CreateDate = app.CreatedDate,
+                        Occupation = app.Client.Occupation,
+                        BirthDate = app.Client.DateofBirth,
+                        Answer = app.Answer.Answers
+
+                    };
+                    resaultList.Add(application);
+                }
+                return resaultList;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("There was a problem fetching the applications.", ex);
+            }
+        }
+
+
+        public async Task<IEnumerable<GetApplicationByClientIdDto>> GetApplicationsByClientIdIsAnsweredTrue(int clientId)
+        {
+            try
+            {
+                var appList = await _applicationService.GetApplicationByClientIdIsAnsweredTrueAsync(clientId);
+                var resaultList = new List<GetApplicationByClientIdDto>();
+
+                foreach (var app in appList)
+                {
+                    var application = new GetApplicationByClientIdDto
+                    {
+                        Id = app.Id,
+                        Answer = app.Answer.Answers,
+                        CreateDate = app.CreatedDate,
+                        FortunetellerFirstName = app.FortuneTeller.FirstName,
+                        FortunetellerLastName = app.FortuneTeller.LastName,
+                        Categories = app.Categories.Select(ac => ac.CategoryName).ToList()
+                    };
+                    resaultList.Add(application);
+                }
+                return resaultList;
+            }
+            catch (Exception ex)
+            {
+
+                throw new ApplicationException("There was a problem fetching the applications.", ex);
+            }
+        }
+
+
+        public async Task<IEnumerable<GetApplicationByClientIsAnsweredFalseDto>> GetApplicationsByClientIdIsAnsweredFalse(int clientId)
+        {
+            try
+            {
+                var appList = await _applicationService.GetApplicationByClientIdIsAnsweredFalseAsync(clientId);
+                var resaultList = new List<GetApplicationByClientIsAnsweredFalseDto>();
+
+                foreach (var app in appList)
+                {
+                    var application = new GetApplicationByClientIsAnsweredFalseDto
+                    {
+                        Id = app.Id,
+                        CreateDate = app.CreatedDate,
+                        FortunetellerFirstName = app.FortuneTeller.FirstName,
+                        FortunetellerLastName = app.FortuneTeller.LastName,
+                        Categories = app.Categories.Select(ac => ac.CategoryName).ToList()
+                    };
+                    resaultList.Add(application);
+                }
+                return resaultList;
+            }
+            catch (Exception ex)
+            {
+
+                throw new ApplicationException("There was a problem fetching the applications.", ex);
+            }
+        }
+
+        public async Task ScoreFotrune(int applicationId, float score)
+        {
+            try
+            {
+                await _answerService.ScoreFortuneAsync(applicationId, score);
+                var fortunetellerId=await _applicationService.GetFortuneTellerIdByApplicationId(applicationId);
+                var fortuneTellerRating = await _answerService.GetAverageScoreForFortuneTellerAsync(fortunetellerId);
+                await _fortuneService.UpdateRating(fortunetellerId, fortuneTellerRating);
+            }
+            catch (Exception ex)
+            {
+
+                throw new ApplicationException("There was a problem .", ex);
+            }
+        }
     }
+
+
 }

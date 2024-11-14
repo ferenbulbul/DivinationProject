@@ -11,6 +11,7 @@ namespace Divination.Domain.Entities
         public string Answers { get; set; }
         public bool IsActive { get; set; }
         
+        public float? Score { get; set; }
         public int ApplicationsId { get; set; }
         public Applications Applications { get; set; }
         

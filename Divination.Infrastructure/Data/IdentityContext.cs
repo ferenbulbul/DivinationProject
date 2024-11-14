@@ -12,7 +12,7 @@ namespace Divination.Infrastructure.Data
 {
     public class IdentityContext : IdentityDbContext<AppUser, AppRole, int>
     {
-        // public IdentityContext() { }
+          public IdentityContext() { }
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options) { }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<AppRole> AppRoles { get; set; }
@@ -22,10 +22,11 @@ namespace Divination.Infrastructure.Data
         public DbSet<Answer> Answers { get; set; }
 
 
-        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        // {
-        //     optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=abc12345;database=divinationdb", new MySqlServerVersion(new Version(9, 0, 0)));
-        // }
+          protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+          {
+              optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=abc12345;database=divinationdb", new MySqlServerVersion(new Version(9, 0, 0)));
+        
+          }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Client>().ToTable("Clients");

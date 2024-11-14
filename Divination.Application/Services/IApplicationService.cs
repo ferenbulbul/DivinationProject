@@ -12,5 +12,9 @@ namespace Divination.Application.Services
         Task AddAplication(ApplicationDto applicationDto);
         Task AddAnswer(int id, string answer);
         Task<IEnumerable<GetApplicationDto>> GetApplications(int fortuneTellerId);
+        Task<IEnumerable<GetApplicationAnsweredTrueDto>?> GetApplicationAnsweredTrue(int fortuneTellerId);
+        Task<IEnumerable<GetApplicationByClientIdDto>> GetApplicationsByClientIdIsAnsweredTrue(int clientId);
+        Task<IEnumerable<GetApplicationByClientIsAnsweredFalseDto>> GetApplicationsByClientIdIsAnsweredFalse(int clientId);
+        Task ScoreFotrune(int applicationId, float score);
     }
 }

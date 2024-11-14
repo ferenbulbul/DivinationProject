@@ -8,5 +8,9 @@ namespace Divination.Domain.Interfaces
     {
         Task<IEnumerable<Applications>> GetApplicationsIsAnswerFalseAsync(int id);
          Task IsAnswerTrue(int id);
+         Task<IEnumerable<Applications>> GetApplicationsIsAnswerTrueAsync(int id);
+         Task<IEnumerable<Applications>> GetApplicationByClientIdIsAnsweredTrueAsync(int id);
+         Task<IEnumerable<Applications>> GetApplicationByClientIdIsAnsweredFalseAsync(int id);
+         Task<int> GetFortuneTellerIdByApplicationId(int ApplicationId);
     }
 }

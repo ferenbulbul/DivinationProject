@@ -8,6 +8,7 @@ namespace Divination.Domain.Interfaces
 {
     public interface IAnswerRepository:IBaseRepository<Answer>
     {   
-       
+       Task ScoreFortuneAsync(int applicationId,float score);
+       Task<float> GetAverageScoreForFortuneTellerAsync(int fortuneTellerId);
     }
 }
