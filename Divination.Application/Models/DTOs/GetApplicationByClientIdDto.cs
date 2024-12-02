@@ -14,5 +14,6 @@ namespace Divination.Application.Models.DTOs
         public string? FortunetellerFirstName { get; set; }
         public string? FortunetellerLastName { get; set; }
         public List<string> Categories { get; set; }
+        public float? Score { get; set; }
     }
 }

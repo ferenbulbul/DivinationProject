@@ -12,6 +12,8 @@ namespace Divination.Domain.Entities
         public string LastName { get; set; }=string.Empty;
         public string Gender { get; set; }=string.Empty;
         public DateTime DateofBirth { get; set; }
+        public bool IsGoogleUser { get; set; }
+        public string? GoogleId { get; set; }
         public bool IsActive { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }

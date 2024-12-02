@@ -10,5 +10,8 @@ namespace Divination.Application.Models.DTOs
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public float? Rating { get; set; }
+        public int RequirementCredit { get; set; }
+        public int TotalVoted { get; set; }
     }
 }

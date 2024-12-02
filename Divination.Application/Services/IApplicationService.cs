@@ -16,5 +16,6 @@ namespace Divination.Application.Services
         Task<IEnumerable<GetApplicationByClientIdDto>> GetApplicationsByClientIdIsAnsweredTrue(int clientId);
         Task<IEnumerable<GetApplicationByClientIsAnsweredFalseDto>> GetApplicationsByClientIdIsAnsweredFalse(int clientId);
         Task ScoreFotrune(int applicationId, float score);
+
     }
 }

@@ -46,5 +46,13 @@ namespace Divination.Infrastructure.Repositories
             return averageScore;
         }
 
+        public async Task<int> GetTotalVoted(int fortuneTellerId)
+        {
+            var totalVoted = await _context.Answers
+                                              .Where(a =>a.Answers!=null && a.Applications.FortunetellerId == fortuneTellerId)
+                                              .CountAsync();
+
+            return totalVoted;
+        }
     }
 }

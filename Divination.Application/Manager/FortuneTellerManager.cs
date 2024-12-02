@@ -26,7 +26,10 @@ namespace Divination.Application.Manager
             {
                 Id=fortuneTeller.Id,
                 FirstName = fortuneTeller.FirstName,
-                LastName = fortuneTeller.LastName
+                LastName = fortuneTeller.LastName,
+                Rating=fortuneTeller.Rating,
+                RequirementCredit=fortuneTeller.RequirementCredit,
+                TotalVoted=fortuneTeller.TotalVoted
             }).ToList();
             return dtoList;
         }

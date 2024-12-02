@@ -36,7 +36,12 @@ namespace Divination.Infrastructure.Repositories
 
         public async Task<T> GetByIdAsync(int id)
         {
-            return await _entities.FindAsync(id);
+            var entity = await _entities.FindAsync(id);
+            if (entity != null)
+            {
+                return entity;
+            }else{throw new Exception("Entity not found");}
+
         }
 
         public async Task IsActiveAsync(int id)
@@ -59,10 +64,10 @@ namespace Divination.Infrastructure.Repositories
         public async Task UpdateAsync(T entity)
         {
             _context.Entry(entity).State = EntityState.Modified;
-            entity.UpdatedDate=DateTime.Now;
+            entity.UpdatedDate = DateTime.Now;
             _context.Entry(entity).Property(x => x.CreatedDate).IsModified = false;
-            _context.Entry(entity).Property(x => x.DeletedDate).IsModified = false; 
-            _context.Entry(entity).Property(x => x.IsActive).IsModified = false; 
+            _context.Entry(entity).Property(x => x.DeletedDate).IsModified = false;
+            _context.Entry(entity).Property(x => x.IsActive).IsModified = false;
 
             await _context.SaveChangesAsync();
         }

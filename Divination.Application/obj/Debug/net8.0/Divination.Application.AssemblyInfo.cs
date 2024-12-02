@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Divination.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ae7f6478dc1de9cf235632c6e87171c5ad7a933e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d214a34e3c187276af41b065f9e4ca37abfaa19d")]
 [assembly: System.Reflection.AssemblyProductAttribute("Divination.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Divination.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

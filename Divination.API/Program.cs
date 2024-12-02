@@ -8,6 +8,8 @@ using Divination.Domain.Interfaces;
 using Divination.Infrastructure;
 using Divination.Infrastructure.Data;
 using Divination.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
@@ -37,9 +39,11 @@ var secretKey = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
 
 builder.Services.AddAuthentication(options =>
 {
+
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+
+
 })
 .AddJwtBearer(options =>
 {
@@ -55,6 +59,11 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero,
 
     };
+}).AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = "52067840114-it4ulbjbrknbril09kddsqe3mailjp5q.apps.googleusercontent.com";
+    googleOptions.ClientSecret = "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";
+    googleOptions.CallbackPath = "/api/Auth/GoogleResponse";
 });
 
 // Identity yapılandırması
@@ -62,7 +71,7 @@ builder.Services.AddIdentity<AppUser, AppRole>()
     .AddEntityFrameworkStores<IdentityContext>()
     .AddDefaultTokenProviders();
 
-// Veritabanı ayarlarıƒ
+// Veritabanı ayarları
 builder.Services.AddDbContext<IdentityContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
     new MySqlServerVersion(new Version(9, 0, 0))));
@@ -80,7 +89,7 @@ builder.Services.AddDbContext<IdentityContext>(options =>
 
 
 
-builder.Services.Configure<FormOptions>(options=> options.MultipartBodyLengthLimit = 10 * 1024 * 1024);
+builder.Services.Configure<FormOptions>(options => options.MultipartBodyLengthLimit = 10 * 1024 * 1024);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -119,8 +128,9 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 
-builder.Services.Configure<FormOptions>(options=>{
-    options.MultipartBodyLengthLimit=104857600;
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 104857600;
 });
 
 // Servisleri ekle
@@ -131,12 +141,15 @@ builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<IApplicationService, ApplicationManager>();
 
 builder.Services.AddScoped<IFortuneTellerService, FortuneTellerManager>();
-builder.Services.AddScoped<IFortuneTellerRepository,FortuneTellerRepository>();
+builder.Services.AddScoped<IFortuneTellerRepository, FortuneTellerRepository>();
 
-builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
-builder.Services.AddScoped<ICategoryService,CategoryManager>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryManager>();
 
-builder.Services.AddScoped<IAnswerRepository,AnswerRepository>();
+builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
+
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IClientService, ClientManager>();
 
 builder.Services.AddScoped<IEmailService, EmailManager>();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
@@ -153,7 +166,7 @@ if (app.Environment.IsDevelopment())
 
 // Middleware'leri kullan
 app.UseCors("AllowAll");
-// app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 // app.UseStaticFiles(new StaticFileOptions

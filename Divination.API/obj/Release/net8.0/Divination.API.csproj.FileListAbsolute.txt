@@ -59,3 +59,4 @@
 /Users/erenbulbul/Desktop/DivinationProject/Divination.API/obj/Release/net8.0/Divination.API.genruntimeconfig.cache
 /Users/erenbulbul/Desktop/DivinationProject/Divination.API/obj/Release/net8.0/ref/Divination.API.dll
 /Users/erenbulbul/Desktop/DivinationProject/Divination.API/obj/Release/net8.0/Divination.API.sourcelink.json
+/Users/erenbulbul/Desktop/DivinationProject/Divination.API/bin/Release/net8.0/Microsoft.AspNetCore.Authentication.Google.dll

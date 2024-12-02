@@ -36,5 +36,72 @@ namespace Divination.Infrastructure.Repositories
             }
         }
 
+        public async Task<int> GetFortuneRequirmentCredit(int fortuneTellerId)
+        {
+
+            var entity = await _entities.FindAsync(fortuneTellerId);
+
+            if (entity != null)
+            {
+               return entity.RequirementCredit;
+            }
+            else
+            {
+                throw new Exception("Entity not found");
+            }
+        }
+
+        public async Task UpdateCredit(int fortuneTellerId,int totalVoted)
+        {
+
+            var entity = await _entities.FindAsync(fortuneTellerId);
+
+            if (entity != null)
+            {
+                 entity.TotalCredit=totalVoted;
+                _context.Entry(entity).State=EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("Entity not found");
+            }
+        }
+
+
+        public async Task UpdateTotalVoted(int fortuneTellerId,int totalVoted)
+        {
+
+            var entity = await _entities.FindAsync(fortuneTellerId);
+
+            if (entity != null)
+            {
+                 entity.TotalVoted=totalVoted;
+                _context.Entry(entity).State=EntityState.Modified;
+                await _context.SaveChangesAsync();
+               
+            }
+            else
+            {
+                throw new Exception("Entity not found");
+            }
+        }
+        // public async Task UpdateFortuneTellerAsync(int fortuneTellerId,Fortuneteller fortune)
+        // {
+
+        //     var entity = await _entities.FindAsync(fortuneTellerId);
+
+        //     if (entity != null)
+        //     {
+        //          entity.TotalCredit=credit;
+        //         _context.Entry(entity).State=EntityState.Modified;
+        //         await _context.SaveChangesAsync();
+               
+        //     }
+        //     else
+        //     {
+        //         throw new Exception("Entity not found");
+        //     }
+        // }
     }
 }

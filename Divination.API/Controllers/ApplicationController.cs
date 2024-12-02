@@ -1,17 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Security.Policy;
 using System.Threading.Tasks;
 using Divination.Application.Models.DTOs;
 using Divination.Application.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace Divination.API.Controllers
 {
-
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class ApplicationController : Controller
@@ -22,22 +17,45 @@ namespace Divination.API.Controllers
         {
             _service = service;
         }
+
+
         [HttpPost]
         public async Task<IActionResult> AddApplication(ApplicationDto applicationDto)
         {
-            if (applicationDto.Photo1 == null)
-            {
-                return BadRequest("Photo is required.");
-            }
-
             try
             {
                 await _service.AddAplication(applicationDto);
-                return Ok();
+
+                var response = new ApiResponse<string>
+                {
+                    Success = true,
+                    Message = "Fal başarıyla kaydedildi.",
+                    Data = null
+                };
+
+                return Ok(response);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                var response = new ApiResponse<string>
+                {
+                    Success = false,
+                    Message = $"Anahtar bulunamadı: {ex.Message}",
+                    Data = null
+                };
+
+                return NotFound(response);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                var response = new ApiResponse<string>
+                {
+                    Success = false,
+                    Message = "Bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+                    Data = null
+                };
+
+                return StatusCode(500, response);
             }
         }
 
@@ -48,42 +66,158 @@ namespace Divination.API.Controllers
             try
             {
                 await _service.AddAnswer(id, answer);
-                return Ok();
+
+                var response = new ApiResponse<string>
+                {
+                    Success = true,
+                    Message = "Cevap başarıyla eklendi.",
+                    Data = null
+                };
+
+                return Ok(response);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                var response = new ApiResponse<string>
+                {
+                    Success = false,
+                    Message = $"Başvuru bulunamadı: {ex.Message}",
+                    Data = null
+                };
+
+                return NotFound(response);
             }
             catch (Exception ex)
             {
-                return NotFound(ex.Message);
+                var response = new ApiResponse<string>
+                {
+                    Success = false,
+                    Message = "Bir hata oluştu. Lütfen daha sonra tekrar deneyin."+ex.Message,
+                    Data = null
+                };
+
+                return StatusCode(500, response);
             }
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetApplicationByFortuneTeller(int id)
         {
-            var application = await _service.GetApplications(id);
-            return Ok(application);
+            try
+            {
+                var applications = await _service.GetApplications(id);
+
+                var response = new ApiResponse<IEnumerable<GetApplicationDto>>
+                {
+                    Success = true,
+                    Message = "Başvurular başarıyla getirildi.",
+                    Data = applications
+                };
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = new ApiResponse<string>
+                {
+                    Success = false,
+                    Message = "Başvurular getirilirken bir hata oluştu.}",
+                    Data = null
+                };
+
+                return StatusCode(500, response);
+            }
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetApplicationByFortuneTellerIsAnsweredTrue(int id)
         {
-            var application = await _service.GetApplicationAnsweredTrue(id);
-            return Ok(application);
+            try
+            {
+                var applications = await _service.GetApplicationAnsweredTrue(id);
+
+                var response = new ApiResponse<IEnumerable<GetApplicationAnsweredTrueDto>>
+                {
+                    Success = true,
+                    Message = "Yanıtlanmış başvurular başarıyla getirildi.",
+                    Data = applications
+                };
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = new ApiResponse<string>
+                {
+                    Success = false,
+                    Message = "Başvurular getirilirken bir hata oluştu.",
+                    Data = null
+                };
+
+                return StatusCode(500, response);
+            }
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetApplicationByClientIdIsAnsweredFalse(int id)
         {
-            var application = await _service.GetApplicationsByClientIdIsAnsweredFalse(id);
-            return Ok(application);
+            try
+            {
+                var applications = await _service.GetApplicationsByClientIdIsAnsweredFalse(id);
+
+                var response = new ApiResponse<IEnumerable<GetApplicationByClientIsAnsweredFalseDto>>
+                {
+                    Success = true,
+                    Message = "Yanıtlanmamış başvurular başarıyla getirildi.",
+                    Data = applications
+                };
+
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                var response = new ApiResponse<string>
+                {
+                    Success = false,
+                    Message = "Başvurular getirilirken bir hata oluştu.",
+                    Data = null
+                };
+
+                return StatusCode(500, response);
+            }
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetApplicationByClientIdIsAnsweredTrue(int id)
         {
-            var application = await _service.GetApplicationsByClientIdIsAnsweredTrue(id);
-            return Ok(application);
-        }
+            try
+            {
+                var applications = await _service.GetApplicationsByClientIdIsAnsweredTrue(id);
 
-        
+                var response = new ApiResponse<IEnumerable<GetApplicationByClientIdDto>>
+                {
+                    Success = true,
+                    Message = "Yanıtlanmış başvurular başarıyla getirildi.",
+                    Data = applications
+                };
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = new ApiResponse<string>
+                {
+                    Success = false,
+                    Message = "Başvurular getirilirken bir hata oluştu.",
+                    Data = null
+                };
+
+                return StatusCode(500, response);
+            }
+        }
     }
 }

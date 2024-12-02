@@ -163,10 +163,16 @@ namespace Divination.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("GoogleId")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("tinyint(1)")
                         .HasDefaultValue(true);
+
+                    b.Property<bool>("IsGoogleUser")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -307,35 +313,35 @@ namespace Divination.Infrastructure.Migrations
                         {
                             Id = 1,
                             CategoryName = "Aşk",
-                            CreatedDate = new DateTime(2024, 11, 12, 17, 30, 27, 998, DateTimeKind.Local).AddTicks(2840),
+                            CreatedDate = new DateTime(2024, 12, 2, 3, 6, 4, 512, DateTimeKind.Local).AddTicks(290),
                             IsActive = true
                         },
                         new
                         {
                             Id = 2,
                             CategoryName = "Kariyer",
-                            CreatedDate = new DateTime(2024, 11, 12, 17, 30, 27, 998, DateTimeKind.Local).AddTicks(2880),
+                            CreatedDate = new DateTime(2024, 12, 2, 3, 6, 4, 512, DateTimeKind.Local).AddTicks(380),
                             IsActive = true
                         },
                         new
                         {
                             Id = 3,
                             CategoryName = "Aile",
-                            CreatedDate = new DateTime(2024, 11, 12, 17, 30, 27, 998, DateTimeKind.Local).AddTicks(2890),
+                            CreatedDate = new DateTime(2024, 12, 2, 3, 6, 4, 512, DateTimeKind.Local).AddTicks(380),
                             IsActive = true
                         },
                         new
                         {
                             Id = 4,
                             CategoryName = "Para",
-                            CreatedDate = new DateTime(2024, 11, 12, 17, 30, 27, 998, DateTimeKind.Local).AddTicks(2890),
+                            CreatedDate = new DateTime(2024, 12, 2, 3, 6, 4, 512, DateTimeKind.Local).AddTicks(390),
                             IsActive = true
                         },
                         new
                         {
                             Id = 5,
                             CategoryName = "Akrabağlık İlişkileri",
-                            CreatedDate = new DateTime(2024, 11, 12, 17, 30, 27, 998, DateTimeKind.Local).AddTicks(2890),
+                            CreatedDate = new DateTime(2024, 12, 2, 3, 6, 4, 512, DateTimeKind.Local).AddTicks(390),
                             IsActive = true
                         });
                 });
@@ -447,12 +453,13 @@ namespace Divination.Infrastructure.Migrations
                 {
                     b.HasBaseType("Divination.Domain.Entities.AppUser");
 
+                    b.Property<int>("Credit")
+                        .HasColumnType("int");
+
                     b.Property<string>("MaritalStatus")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Occupation")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.ToTable("Clients", (string)null);
@@ -468,6 +475,15 @@ namespace Divination.Infrastructure.Migrations
 
                     b.Property<float?>("Rating")
                         .HasColumnType("float");
+
+                    b.Property<int>("RequirementCredit")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalCredit")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalVoted")
+                        .HasColumnType("int");
 
                     b.ToTable("FortuneTellers", (string)null);
                 });

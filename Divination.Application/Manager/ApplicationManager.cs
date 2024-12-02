@@ -16,16 +16,25 @@ namespace Divination.Application.Manager
         private readonly IApplicationRepository _applicationService;
         private readonly IAnswerRepository _answerService;
         private readonly IFortuneTellerRepository _fortuneService;
+        private readonly IClientRepository _clientService;
 
-        public ApplicationManager(IApplicationRepository service, ICategoryRepository categoryservice, IAnswerRepository answerService, IFortuneTellerRepository fortuneService)
+
+        public ApplicationManager(IApplicationRepository service, ICategoryRepository categoryservice, IAnswerRepository answerService, IFortuneTellerRepository fortuneService, IClientRepository clientService)
         {
             _applicationService = service;
             _categoryservice = categoryservice;
             _answerService = answerService;
             _fortuneService = fortuneService;
+            _clientService = clientService;
         }
         public async Task AddAplication(ApplicationDto applicationDto)
         {
+            var fortuneteller = await _fortuneService.GetByIdAsync(applicationDto.FortunetellerId);
+            var clientCredit = await _clientService.GetClientCredit(applicationDto.ClientId);
+            if (clientCredit-fortuneteller.RequirementCredit< 0)
+            {
+                throw new Exception("Insufficient Credit");
+            }
             var images = new List<byte[]>();
 
             foreach (var photo in new List<string> { applicationDto.Photo1, applicationDto.Photo2, applicationDto.Photo3 })
@@ -64,19 +73,14 @@ namespace Divination.Application.Manager
                     application.Categories.Add(category);
                 }
             }
-            try
-            {
+           
+                var fortunetellerTotalCredit=fortuneteller.TotalCredit+fortuneteller.RequirementCredit;
+                await _fortuneService.UpdateCredit(fortuneteller.Id,fortunetellerTotalCredit);
+                
+                var ClientTotalCredit= clientCredit-fortuneteller.RequirementCredit;
+                await _clientService.UpdateCredit(application.ClientId,ClientTotalCredit);
                 await _applicationService.AddAsync(application);
-            }
-            catch (Exception ex)
-            {
-                if (ex.InnerException != null)
-                {
-                    Console.WriteLine("Inner Exception: " + ex.InnerException.Message);
-                }
-
-                Console.WriteLine(ex.Message);
-            }
+                
 
         }
 
@@ -99,6 +103,7 @@ namespace Divination.Application.Manager
 
         public async Task<IEnumerable<GetApplicationDto>?> GetApplications(int fortuneTellerId)
         {
+        
             try
             {
 
@@ -189,7 +194,8 @@ namespace Divination.Application.Manager
                         CreateDate = app.CreatedDate,
                         FortunetellerFirstName = app.FortuneTeller.FirstName,
                         FortunetellerLastName = app.FortuneTeller.LastName,
-                        Categories = app.Categories.Select(ac => ac.CategoryName).ToList()
+                        Categories = app.Categories.Select(ac => ac.CategoryName).ToList(),
+                        Score =app.Answer.Score
                     };
                     resaultList.Add(application);
                 }
@@ -236,13 +242,14 @@ namespace Divination.Application.Manager
             try
             {
                 await _answerService.ScoreFortuneAsync(applicationId, score);
-                var fortunetellerId=await _applicationService.GetFortuneTellerIdByApplicationId(applicationId);
+                var fortunetellerId = await _applicationService.GetFortuneTellerIdByApplicationId(applicationId);
                 var fortuneTellerRating = await _answerService.GetAverageScoreForFortuneTellerAsync(fortunetellerId);
                 await _fortuneService.UpdateRating(fortunetellerId, fortuneTellerRating);
+                var totalVoted= await _answerService.GetTotalVoted(fortunetellerId);
+                await _fortuneService.UpdateTotalVoted(fortunetellerId,totalVoted);
             }
             catch (Exception ex)
             {
-
                 throw new ApplicationException("There was a problem .", ex);
             }
         }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Divination.Application.Models.DTOs;
 using Divination.Application.Services;
@@ -8,31 +7,40 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Divination.API.Controllers
 {
-
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
+
         public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
-
 
         [HttpPost]
         public async Task<IActionResult> AddCategory(CategoryDto categoryDto)
         {
             if (categoryDto == null)
             {
-                return BadRequest();
-            }
-            else
-            {
-                await _categoryService.AddCtegory(categoryDto);
-                return Ok();
+                var response = new ApiResponse<string>
+                {
+                    Success = false,
+                    Message = "Category data is null.",
+                    Data = null
+                };
+                return BadRequest(response);
             }
 
+            await _categoryService.AddCtegory(categoryDto);
+
+            var successResponse = new ApiResponse<string>
+            {
+                Success = true,
+                Message = "Category added successfully.",
+                Data = null
+            };
+            return Ok(successResponse);
         }
 
         [HttpPut]
@@ -40,27 +48,63 @@ namespace Divination.API.Controllers
         {
             if (categoryDto == null)
             {
-                return BadRequest();
+                var response = new ApiResponse<string>
+                {
+                    Success = false,
+                    Message = "Category data is null.",
+                    Data = null
+                };
+                return BadRequest(response);
             }
-            else
+
+            await _categoryService.UpdateCategory(categoryDto);
+
+            var successResponse = new ApiResponse<string>
             {
-                await _categoryService.UpdateCategory(categoryDto);
-                return Ok();
-            }
+                Success = true,
+                Message = "Category updated successfully.",
+                Data = null
+            };
+            return Ok(successResponse);
         }
 
         [HttpPut]
         public async Task<IActionResult> IsActiveCategory(int id)
         {
-                await _categoryService.IsActiveCategory(id);
-                return Ok();   
+            if (id <= 0)
+            {
+                var response = new ApiResponse<string>
+                {
+                    Success = false,
+                    Message = "Invalid category ID.",
+                    Data = null
+                };
+                return BadRequest(response);
+            }
+
+            await _categoryService.IsActiveCategory(id);
+
+            var successResponse = new ApiResponse<string>
+            {
+                Success = true,
+                Message = "Category status updated successfully.",
+                Data = null
+            };
+            return Ok(successResponse);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetallCategory()
         {
-                var categories=await _categoryService.GetallCategoryAsync();
-                return Ok(categories);   
+            var categories = await _categoryService.GetallCategoryAsync();
+
+            var response = new ApiResponse<IEnumerable<CategoryDto>>
+            {
+                Success = true,
+                Message = "Categories retrieved successfully.",
+                Data = categories
+            };
+            return Ok(response);
         }
     }
 }

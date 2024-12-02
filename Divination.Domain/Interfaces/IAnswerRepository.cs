@@ -10,5 +10,6 @@ namespace Divination.Domain.Interfaces
     {   
        Task ScoreFortuneAsync(int applicationId,float score);
        Task<float> GetAverageScoreForFortuneTellerAsync(int fortuneTellerId);
+       Task<int> GetTotalVoted(int fortuneTellerId);
     }
 }

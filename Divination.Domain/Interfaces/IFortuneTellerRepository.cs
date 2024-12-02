@@ -9,5 +9,8 @@ namespace Divination.Domain.Interfaces
     public interface IFortuneTellerRepository:IBaseRepository<Fortuneteller>
     {
         Task UpdateRating(int id,float rating);
+        Task<int> GetFortuneRequirmentCredit(int fortuneTellerId);
+        Task UpdateCredit(int credit,int fortuneTellerId);
+        Task UpdateTotalVoted(int fortuneTellerId,int totalVoted);
     }
 }
