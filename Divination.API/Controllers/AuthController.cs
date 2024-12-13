@@ -530,6 +530,21 @@ namespace Divination.API.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SigninGoogleFlutter(LoginGoogleDto loginDto)
+        {
+            if (!await _userService.IsThereGoogleId(loginDto.googleId))
+            {
+                await _userService.CreateUserFromGoogleAsync(loginDto.email, loginDto.firstName, loginDto.lastName, loginDto.googleId);
+            }
+            var loginResponse = await _userService.SignInGoogleUserAsync(loginDto.email);
+            return Ok(new ApiResponse<LoginResponseDto>
+            {
+                Success = true,
+                Message = "Login successful.",
+                Data = loginResponse
+            });
+        }
 
 
     }

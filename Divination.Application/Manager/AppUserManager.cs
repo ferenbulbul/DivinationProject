@@ -261,7 +261,8 @@ namespace Divination.Application.Manager
                 IsGoogleUser = true,
                 EmailConfirmed = true,
                 IsActive = true,
-                SecurityStamp = Guid.NewGuid().ToString()
+                SecurityStamp = Guid.NewGuid().ToString(),
+                CreatedDate=DateTime.Now
             };
 
             var result = await _userManager.CreateAsync(newUser);
