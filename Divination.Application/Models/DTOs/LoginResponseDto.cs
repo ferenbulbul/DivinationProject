@@ -14,7 +14,5 @@ namespace Divination.Application.Models.DTOs
         public string Token { get; set; }
         public bool EmailConfirmed { get; set; }
         public float? Rating { get; set; }
-
-
     }
 }

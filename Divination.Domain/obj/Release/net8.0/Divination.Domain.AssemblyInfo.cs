@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Divination.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a803c6b71733767c13573510417d2b790ed7e7c0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+837be10632a7a9a3b454abe5ec9c2eba2d443ceb")]
 [assembly: System.Reflection.AssemblyProductAttribute("Divination.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Divination.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

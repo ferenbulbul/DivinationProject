@@ -7,10 +7,10 @@ namespace Divination.Application.Models.DTOs
 {
     public class LoginGoogleDto
     {
-        public string googleId { get; set; }
-        public string email { get; set; }
-        public string firstName { get; set; }
-        public string lastName { get; set; }
+        public string GoogleId { get; set; }
+        public string Email { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
       
     }
 }

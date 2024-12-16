@@ -251,7 +251,7 @@ namespace Divination.Application.Manager
             {
                 return existingUser;
             }
-            var newUser = new AppUser
+            var newUser = new Client
             {
                 UserName = email,
                 Email = email,
@@ -262,7 +262,9 @@ namespace Divination.Application.Manager
                 EmailConfirmed = true,
                 IsActive = true,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                CreatedDate=DateTime.Now
+                CreatedDate=DateTime.Now,
+                Credit=50,
+                
             };
 
             var result = await _userManager.CreateAsync(newUser);
@@ -292,7 +294,9 @@ namespace Divination.Application.Manager
                 Email = existingUser.Email,
                 Roles = roles.ToList(),
                 EmailConfirmed = existingUser.EmailConfirmed,
-                Token = token
+                Token = token,
+                
+
             };
             return user;
         }
