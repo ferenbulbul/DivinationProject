@@ -24,11 +24,12 @@ namespace Divination.Application.Manager
         private readonly JwtSettings _jwtSettings;
         private readonly IFortuneTellerRepository _fortuneManager;
         private readonly IClientRepository _clientService;
+        private readonly IFalCategoryRepository _falCategory;
 
 
 
 
-        public AppUserManager(UserManager<AppUser> userManager, IAppUserRepository appUserRepository, SignInManager<AppUser> signInManager, IOptions<JwtSettings> jwtSettings, IFortuneTellerRepository fortuneManager, IClientRepository clientService)
+        public AppUserManager(UserManager<AppUser> userManager, IAppUserRepository appUserRepository, SignInManager<AppUser> signInManager, IOptions<JwtSettings> jwtSettings, IFortuneTellerRepository fortuneManager, IClientRepository clientService,IFalCategoryRepository falCategory)
         {
             _appUserRepository = appUserRepository;
             _userManager = userManager;
@@ -36,9 +37,11 @@ namespace Divination.Application.Manager
             _jwtSettings = jwtSettings.Value;
             _fortuneManager = fortuneManager;
             _clientService = clientService;
+            _falCategory=falCategory;
         }
         public async Task<IdentityResult> RegisterClientAsync(RegisterClientDto registerDto)
         {
+
             var user = new Client
             {
                 FirstName = registerDto.FirstName,
@@ -66,10 +69,13 @@ namespace Divination.Application.Manager
 
         public async Task<IdentityResult> RegisterFortuneTellertAsync(RegisterFortuneTellerDto registerDto)
         {
+
+            var FalCategoryList = await _falCategory.GetFalCategoriesAsync(registerDto.FalCategories);
+
             var user = new Fortuneteller
             {
                 FirstName = registerDto.FirstName,
-                DateofBirth=registerDto.DateOfBirth,
+                DateofBirth = registerDto.DateOfBirth,
                 LastName = registerDto.LastName,
                 Gender = registerDto.Gender,
                 UserName = registerDto.UserName,
@@ -81,8 +87,10 @@ namespace Divination.Application.Manager
                 Rating = 5,
                 RequirementCredit = 10,
                 TotalVoted = 0,
-                IsGoogleUser = false
+                IsGoogleUser = false,
+                FalCategories = FalCategoryList
             };
+
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
             if (result.Succeeded)
@@ -219,7 +227,7 @@ namespace Divination.Application.Manager
             existingEntity.DateofBirth = fortuneTellerDto.DateofBirth;
             existingEntity.Experience = fortuneTellerDto.Experience;
             existingEntity.Email = fortuneTellerDto.Email;
-            existingEntity.RequirementCredit=fortuneTellerDto.RequirementCredit;
+            existingEntity.RequirementCredit = fortuneTellerDto.RequirementCredit;
 
             await _fortuneManager.UpdateAsync(existingEntity);
         }
@@ -262,9 +270,9 @@ namespace Divination.Application.Manager
                 EmailConfirmed = true,
                 IsActive = true,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                CreatedDate=DateTime.Now,
-                Credit=50,
-                
+                CreatedDate = DateTime.Now,
+                Credit = 50,
+
             };
 
             var result = await _userManager.CreateAsync(newUser);
@@ -295,7 +303,7 @@ namespace Divination.Application.Manager
                 Roles = roles.ToList(),
                 EmailConfirmed = existingUser.EmailConfirmed,
                 Token = token,
-                
+
 
             };
             return user;

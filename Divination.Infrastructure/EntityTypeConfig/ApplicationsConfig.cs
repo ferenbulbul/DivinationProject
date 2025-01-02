@@ -21,13 +21,17 @@ namespace Divination.Infrastructure.EntityTypeConfig
             .HasForeignKey(a => a.FortunetellerId);
 
             builder.HasOne(a => a.Answer)
-            .WithOne(u => u.Applications)  
+            .WithOne(u => u.Applications)
             .HasForeignKey<Answer>(u => u.ApplicationsId);
+
+             builder.HasOne(f => f.FalCategory)
+                .WithMany(fc => fc.Applications)
+                .HasForeignKey(f => f.FalCategoryId);
 
             builder.HasMany(a => a.Categories)
          .WithMany(c => c.Applications)
          .UsingEntity<Dictionary<string, object>>(
-             "ApplicationCategory",  // Ara tablo adı
+             "ApplicationCategory",
              j => j.HasOne<Category>().WithMany().HasForeignKey("CategoryId"),
              j => j.HasOne<Applications>().WithMany().HasForeignKey("ApplicationsId")
          );

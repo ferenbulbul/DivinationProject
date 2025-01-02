@@ -106,5 +106,19 @@ namespace Divination.API.Controllers
             };
             return Ok(response);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetallFalCategory()
+        {
+            var categories = await _categoryService.GetAllFalCategoryAsync();
+
+            var response = new ApiResponse<IEnumerable<CategoryDto>>
+            {
+                Success = true,
+                Message = "Categories retrieved successfully.",
+                Data = categories
+            };
+            return Ok(response);
+        }
     }
 }

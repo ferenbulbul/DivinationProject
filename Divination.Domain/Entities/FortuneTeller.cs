@@ -13,5 +13,6 @@ namespace Divination.Domain.Entities
          public int TotalCredit { get; set; }
          public int TotalVoted { get; set; }
          public ICollection<Applications> Applications { get; set; }
+         public ICollection<FalCategory> FalCategories { get; set; }
     }
 }

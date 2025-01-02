@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Divination.Domain.Entities;
 
 public class RegisterFortuneTellerDto
 {
@@ -10,4 +11,5 @@ public class RegisterFortuneTellerDto
     public string UserName { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
+    public List<int> FalCategories { get; set; }
 }

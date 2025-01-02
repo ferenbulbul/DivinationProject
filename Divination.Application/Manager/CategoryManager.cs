@@ -12,9 +12,11 @@ namespace Divination.Application.Manager
     public class CategoryManager : ICategoryService
     {
         private readonly ICategoryRepository _categoryService;
-        public CategoryManager(ICategoryRepository categoryService)
+        private readonly IFalCategoryRepository _falCategoryService;
+        public CategoryManager(ICategoryRepository categoryService, IFalCategoryRepository falCategoryService)
         {
             _categoryService = categoryService;
+            _falCategoryService = falCategoryService;
         }
         public async Task AddCtegory(CategoryDto categoryDto)
         {
@@ -32,8 +34,6 @@ namespace Divination.Application.Manager
 
                 throw;
             }
-
-
         }
 
         public async Task UpdateCategory(CategoryDto categoryDto)
@@ -81,8 +81,24 @@ namespace Divination.Application.Manager
             {
                 throw;
             }
+        }
 
-
+        public async Task<IEnumerable<CategoryDto>> GetAllFalCategoryAsync()
+        {
+            try
+            {
+                var categories = await _falCategoryService.GetAllAsync();
+                var categoryDtos = categories.Select(category => new CategoryDto
+                {
+                    Id = category.Id,
+                    CategoryName = category.FortuneCategory,
+                }).ToList();
+                return categoryDtos;
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
     }
 }

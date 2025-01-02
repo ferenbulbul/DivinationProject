@@ -9,5 +9,6 @@ namespace Divination.Domain.Interfaces
         Task<bool> Register(AppUser appUser);
         Task<AppUser> GetEmailGoogle(string email);
         Task<bool> IsThereGoogleIdAsync(string googleId);
+
     }
 }

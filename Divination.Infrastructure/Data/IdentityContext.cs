@@ -12,7 +12,7 @@ namespace Divination.Infrastructure.Data
 {
     public class IdentityContext : IdentityDbContext<AppUser, AppRole, int>
     {
-        // public IdentityContext() { }
+         public IdentityContext() { }
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options) { }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<AppRole> AppRoles { get; set; }
@@ -22,16 +22,17 @@ namespace Divination.Infrastructure.Data
         public DbSet<Answer> Answers { get; set; }
 
 
-        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        // {
-        //     optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=abc12345;database=divinationdb", new MySqlServerVersion(new Version(9, 0, 0)));
-        // }
+           protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+           {
+              optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=abc12345;database=divinationdb", new MySqlServerVersion(new Version(9, 0, 0)));
+          }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Client>().ToTable("Clients");
             builder.Entity<Fortuneteller>().ToTable("FortuneTellers");
             builder.Entity<Applications>().ToTable("Applications");
             builder.Entity<Answer>().ToTable("Answers");
+            builder.Entity<FalCategory>().ToTable("FalCategories");
 
             builder.ApplyConfiguration(new AppUserConfig());
             builder.ApplyConfiguration(new ApplicationsConfig());
@@ -51,6 +52,11 @@ namespace Divination.Infrastructure.Data
                 new AppRole { Id = 1, Name = "admin", NormalizedName = "ADMIN".ToUpper() },
                 new AppRole { Id = 2, Name = "fortuneteller", NormalizedName = "FORTUNETELLER".ToUpper() },
                 new AppRole { Id = 3, Name = "client", NormalizedName = "CLIENT".ToUpper() });
+
+
+            builder.Entity<FalCategory>().HasData(
+                new FalCategory { Id = 1, FortuneCategory = "Kahve Falı",IsActive=true ,CreatedDate=DateTime.Now },
+                new FalCategory { Id = 2, FortuneCategory = "El Falı Falı",IsActive=true ,CreatedDate=DateTime.Now  });
 
         }
     }

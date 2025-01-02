@@ -13,5 +13,7 @@ namespace Divination.Application.Services
         Task UpdateCategory(CategoryDto categoryDto);
         Task IsActiveCategory(int id);
         Task<IEnumerable<CategoryDto>> GetallCategoryAsync();
+        Task<IEnumerable<CategoryDto>> GetAllFalCategoryAsync();
+
     }
 }

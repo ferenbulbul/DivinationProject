@@ -26,8 +26,12 @@ namespace Divination.Domain.Entities
         public ICollection<Category> Categories { get; set; }
 
         public Answer Answer { get; set; }
+
+        public int FalCategoryId { get; set; }
+        public FalCategory FalCategory { get; set; }
         
         
+
         
         public bool IsActive { get; set; }
         public DateTime? CreatedDate { get; set; }

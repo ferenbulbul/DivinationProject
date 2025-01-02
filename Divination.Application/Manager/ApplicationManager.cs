@@ -17,15 +17,17 @@ namespace Divination.Application.Manager
         private readonly IAnswerRepository _answerService;
         private readonly IFortuneTellerRepository _fortuneService;
         private readonly IClientRepository _clientService;
+        private readonly IFalCategoryRepository _falCategory;
 
 
-        public ApplicationManager(IApplicationRepository service, ICategoryRepository categoryservice, IAnswerRepository answerService, IFortuneTellerRepository fortuneService, IClientRepository clientService)
+        public ApplicationManager(IApplicationRepository service, ICategoryRepository categoryservice, IAnswerRepository answerService, IFortuneTellerRepository fortuneService, IClientRepository clientService,IFalCategoryRepository falCategory)
         {
             _applicationService = service;
             _categoryservice = categoryservice;
             _answerService = answerService;
             _fortuneService = fortuneService;
             _clientService = clientService;
+             _falCategory=falCategory;
         }
         public async Task AddAplication(ApplicationDto applicationDto)
         {
@@ -52,6 +54,7 @@ namespace Divination.Application.Manager
                     }
                 }
             }
+            var falCategoryId=await _falCategory.GetByIdAsync(applicationDto.FalCategoryId);
             var application = new Applications
             {
                 ImageData1 = images.ElementAtOrDefault(0),
@@ -59,11 +62,14 @@ namespace Divination.Application.Manager
                 ImageData3 = images.ElementAtOrDefault(2),
                 ClientId = applicationDto.ClientId,
                 FortunetellerId = applicationDto.FortunetellerId,
+                FalCategory=falCategoryId,
                 Categories = new List<Category>(),
+
                 IsAnswer = false,
                 CreatedDate = DateTime.Now
 
             };
+            
 
             foreach (var categoryId in applicationDto.CategoryIds)
             {
